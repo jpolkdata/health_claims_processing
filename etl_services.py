@@ -65,7 +65,7 @@ class BasicTransformService(TransformService):
     def transform(self, data):
         #Ex remove duplicates, fill missing values, add new column
         data = data.drop_duplicates()
-        data = data.fillna(method='ffill')
+        data = data.ffill()
         data['total'] = data['quantity'].astype(float) * data['price']
         return data
 
