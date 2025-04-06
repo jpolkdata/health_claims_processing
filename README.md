@@ -10,3 +10,14 @@ Install the requirements using `py -m pip install -r requirements.txt`
 
 # Usage
 To run the tests use the command `pytest test_etl_pipeline.py`
+
+# Next Steps
+To make a more scalable, highly available, and auditable pipeline, we should consider the following
+- Using Spark or Flink for scalability
+- Deploy on a cloud platform for high availability
+- Implement logging and monitoring using Kafka, Prometheus, or Grafana
+
+We can also improve this solution by
+- Implementing parallel processing
+- Adding error handling and retry mechanisms
+- Using more restrictive data validation to ensure data quality before it loads to the destination
