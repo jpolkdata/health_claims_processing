@@ -50,19 +50,19 @@ class SQLExtractService(ExtractService):
         self.query = query
 
     def extract(self):
-        conn = sqllite3.connect(self.db_path)
+        conn = sqlite3.connect(self.db_path)
         data = pd.read_sql_query(self.query, conn)
         data['source'] = 'SQL'
         conn.close()
         return data
-    
+
 class TransformService(ABC):
     @abstractmethod
     def transform(self, data):
         pass
 
 class BasicTransformService(TransformService):
-    def Transform(self, data):
+    def transform(self, data):
         #Ex remove duplicates, fill missing values, add new column
         data = data.drop_duplicates()
         data = data.fillna(method='ffill')
@@ -74,13 +74,13 @@ class LoadService(ABC):
     def load(self, data):
         pass
 
-class SQLLiteLoadServie(LoadService):
+class SQLiteLoadService(LoadService):
     def __init__(self, db_path, table_name):
         self.db_path = db_path
         self.table_name = table_name
 
-    del load(self, data):
-        engine = create_engine(f'sqllite:///{self.db_path}')
+    def load(self, data):
+        engine = create_engine(f'sqlite:///{self.db_path}')
         data['timestamp'] = datetime.now()
         data.to_sql(self.table_name, con=engine, if_exists='replace', index=False)
 
@@ -92,5 +92,5 @@ class ETLPipeline:
 
     def run(self):
         extracted_data = self.extractor.extract()
-        transformed_data = self.transfomer.transform(extracted_data)
+        transformed_data = self.transformer.transform(extracted_data)
         self.loader.load(transformed_data)
